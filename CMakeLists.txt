@@ -14,6 +14,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
 add_executable(windfury
   main.cpp
+  src/tunnelrat/tunnelrat.h src/tunnelrat/tunnelrat.cpp
+  src/tunnelrat/datetypes.h
+  src/tunnelrat/events.h src/tunnelrat/events.cpp
+  src/tunnelrat/mathtypes.h
 )
 target_link_libraries(windfury Qt${QT_VERSION_MAJOR}::Core)
 
