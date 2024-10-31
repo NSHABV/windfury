@@ -24,7 +24,7 @@ enum MealType
 
 using SumVal = quint64; // No idea what kind of money you're using, man. Hope it's dollars.
 using TransactionVal = quint32;
-using WeightVal = quint8;
+using WeightVal = qint16;
 
 }
 

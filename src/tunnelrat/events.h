@@ -22,12 +22,12 @@ class Event
 public:
     Event(const EventTime &eventTime, const QString &name);
 
-    void const setRepeatable(bool set);
+    void setRepeatable(bool set);
     bool isRepeatable(bool set);
     EventTime getRepeatTime();
-    void const setRepeatTime(const EventTime &repeatTime);
+    void setRepeatTime(const EventTime &repeatTime);
 
-    void const setTime(const EventTime &eventTime);
+    void setTime(const EventTime &eventTime);
     EventTime getTime();
 protected:
     EventTime mTime;
@@ -35,18 +35,18 @@ protected:
     bool mRepeatable;
     EventTime mRepeatTime;
 
-    QString name;
+    QString mName;
 };
 
 class TransactionEvent : public Event
 {
 public:
-    TransactionEvent(const EventTime &eventTime, TransactionVal mVal);
+    TransactionEvent(const EventTime &eventTime, const QString &name, TransactionVal mVal);
 
-    virtual TransactionVal getValue();
-    void const setValue(TransactionVal mVal);
+    virtual TransactionVal getValue() const;
+    void setValue(TransactionVal mVal);
 
-    virtual TransactionEvent operator+(const TransactionEvent &other) const;
+    virtual TransactionEvent operator+(const TransactionEvent &other);
 protected:
     TransactionVal mVal;
     TransactionPriority mPriority;
@@ -54,12 +54,14 @@ protected:
 
 class ConsumptionEvent : public TransactionEvent
 {
-    ConsumptionEvent(const EventTime &eventTime, const Meal &meal);
+    friend class TransactionEvent;
+    ConsumptionEvent(const EventTime &eventTime, const QString &name, const Meal &meal);
+    ConsumptionEvent(const EventTime &eventTime, const QString &name, const Meal &meal, TransactionVal mVal);
 
-    virtual TransactionEvent operator+(const TransactionEvent &other) const override;
+    ConsumptionEvent operator+(const ConsumptionEvent &other);
 
-    void const setMeal(const Meal &meal);
-    virtual Meal getMeal();
+    void setMeal(const Meal &meal);
+    virtual Meal getMeal() const;
 protected:
     Meal mCaloricVal;
 };
