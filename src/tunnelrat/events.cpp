@@ -48,6 +48,16 @@ EventTime Event::getTime()
     return mTime;
 }
 
+void Event::setName(const QString& name)
+{
+    mName = name;
+}
+
+QString Event::getName() const
+{
+    return mName;
+}
+
 TransactionEvent::TransactionEvent(const EventTime &eventTime, const QString &name, TransactionVal mVal) : Event(eventTime, name)
 {
     mVal = mVal;
@@ -77,24 +87,26 @@ ConsumptionEvent::ConsumptionEvent(const EventTime &eventTime, const QString &na
     mCaloricVal = meal;
 }
 
-ConsumptionEvent::ConsumptionEvent(const EventTime &eventTime, const QString &name, const Meal &meal, TransactionVal val) : TransactionEvent(eventTime, name, val)
+ConsumptionEvent::ConsumptionEvent(const EventTime &eventTime, const QString &name, const Meal &meal, TransactionVal val) 
+    : TransactionEvent(eventTime, name, val)
 {
     mCaloricVal = meal;
 }
 
 ConsumptionEvent ConsumptionEvent::operator+(const ConsumptionEvent &other)
 {
+    auto mealPass = this->getMeal();
     auto otherMeal = other.getMeal().nutritionalContents;
     for (auto key : otherMeal.keys())
     {
         if (this->mCaloricVal.nutritionalContents.contains(key))
         {
             qint16 val = this->mCaloricVal.nutritionalContents.value(key) + otherMeal.value(key);
-            this->mCaloricVal.nutritionalContents.insert(key, val);
+            mealPass.nutritionalContents.insert(key, val);
         }
     }
 
-    return ConsumptionEvent(eventOrig.getTime(), eventOrig.getName, otherMeal, this->getValue() + other.getValue())
+    return ConsumptionEvent(this->getTime(), this->getName(), mealPass, this->getValue() + other.getValue());
 }
 
 void ConsumptionEvent::setMeal(const Meal &meal)
@@ -106,5 +118,4 @@ Meal ConsumptionEvent::getMeal() const
 {
     return mCaloricVal;
 }
-
 };

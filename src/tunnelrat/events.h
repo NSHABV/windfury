@@ -29,6 +29,9 @@ public:
 
     void setTime(const EventTime &eventTime);
     EventTime getTime();
+
+    void setName(const QString& name);
+    QString getName() const;
 protected:
     EventTime mTime;
 
